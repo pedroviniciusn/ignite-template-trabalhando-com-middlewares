@@ -46,17 +46,17 @@ function checksTodoExists(request, response, next) {
   const user = users.find(user => user.username === username)
 
   if(!user) {
-    return response.status(404).json()
+    return response.status(404).json({error: 'User not found'})
   }
 
   if(!validate(id)) {
-    return response.status(400).json()
+    return response.status(400).json({error: 'An error has occurred, please try again'})
   }
 
   const todo = user.todos.find(todo => todo.id === id)
 
   if(!todo) {
-    return response.status(404).json()
+    return response.status(404).json({error: 'To-do not found'})
   }
 
   request.user = user
@@ -82,7 +82,7 @@ function findUserById(request, response, next) {
 app.post('/users', (request, response) => {
   const { name, username } = request.body;
 
-  const usernameAlreadyExists = users.some((user) => user.username === username);
+  const usernameAlreadyExists = users.find((user) => user.username === username);
 
   if (usernameAlreadyExists) {
     return response.status(400).json({ error: 'Username already exists' });
